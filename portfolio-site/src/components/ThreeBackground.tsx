@@ -6,9 +6,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 interface ThreeBackgroundProps {
   className?: string;
+  width?: number;
+  height?: number;
+  texturePath?: string;
+  incline?: number
 }
 
-export default function ThreeBackground({ className = '' }: ThreeBackgroundProps) {
+export default function ThreeBackground({ className = '', width, height, texturePath = '/futuristic-chrome.png.png', incline = 0 }: ThreeBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{
     scene: THREE.Scene;
@@ -29,7 +33,9 @@ export default function ThreeBackground({ className = '' }: ThreeBackgroundProps
 
     // Scene setup functions adapted from three-background
     function setupCamera() {
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const containerWidth = width || containerRef.current!.clientWidth;
+      const containerHeight = height || containerRef.current!.clientHeight;
+      const camera = new THREE.PerspectiveCamera(100, containerWidth / containerHeight, 0.1, 1000);
       camera.zoom = 5;
       camera.position.set(0, -0.2, 10);
       camera.updateProjectionMatrix();
@@ -37,16 +43,18 @@ export default function ThreeBackground({ className = '' }: ThreeBackgroundProps
     }
 
     function setupRenderer() {
+      const containerWidth = width || containerRef.current!.clientWidth;
+      const containerHeight = height || containerRef.current!.clientHeight;
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(containerWidth, containerHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setClearColor(0x000000, 0); // Transparent background
       return renderer;
     }
 
-    function loadStripeGradientTexture() {
+    function loadGradientTexture(path: string) {
       const textureLoader = new THREE.TextureLoader();
-      const texture = textureLoader.load('/gradient-chrome.png');
+      const texture = textureLoader.load(path);
       texture.wrapS = THREE.ClampToEdgeWrapping;
       texture.wrapT = THREE.ClampToEdgeWrapping;
       return texture;
@@ -59,19 +67,19 @@ export default function ThreeBackground({ className = '' }: ThreeBackgroundProps
       });
     }
 
-    function setupUniforms(stripeGradientTexture: THREE.Texture, envRenderTarget: THREE.WebGLRenderTarget) {
+    function setupUniforms(gradientTexture: THREE.Texture, envRenderTarget: THREE.WebGLRenderTarget) {
       return {
         u_time: { value: 0 },
         u_noise_scale: { value: new THREE.Vector2(0.2, 0.45) },
         u_noise_amp: { value: 1.0 },
         u_noise_speed: { value: 0.03 },
         u_offset: { value: 0.05 },
-        u_incline: { value: new THREE.Vector3(0.2, 0, 0) },
+        u_incline: { value: new THREE.Vector3(incline, 0, 0) },
         u_noise_translate_speed: { value: -0.05 },
         u_env_texture: { value: envRenderTarget.texture },
         u_edge_reflection_min: { value: 0.0 },
         u_edge_reflection_max: { value: 1.0 },
-        u_gradient_ramp: { value: stripeGradientTexture },
+        u_gradient_ramp: { value: gradientTexture },
         u_gradient_ramp_min: { value: 0.5 },
         u_gradient_ramp_max: { value: -0.3 },
         u_gradient_scale: { value: new THREE.Vector3(0.15, 1.0, 1.0) },
@@ -381,9 +389,12 @@ export default function ThreeBackground({ className = '' }: ThreeBackgroundProps
     }
 
     function onWindowResize(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer) {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      if (!containerRef.current) return;
+      const containerWidth = width || containerRef.current.clientWidth;
+      const containerHeight = height || containerRef.current.clientHeight;
+      camera.aspect = containerWidth / containerHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(containerWidth, containerHeight);
     }
 
     // Initialize the scene
@@ -394,9 +405,9 @@ export default function ThreeBackground({ className = '' }: ThreeBackgroundProps
     // Append to container
     containerRef.current.appendChild(renderer.domElement);
 
-    const stripeGradientTexture = loadStripeGradientTexture();
+    const gradientTexture = loadGradientTexture(texturePath);
     const envRenderTarget = createEnvRenderTarget();
-    const uniforms = setupUniforms(stripeGradientTexture, envRenderTarget);
+    const uniforms = setupUniforms(gradientTexture, envRenderTarget);
     const gradientMaterial = createGradientMaterial(uniforms);
     const envScene = createEnvScene(gradientMaterial);
     const plane = createPlane(uniforms);
@@ -453,8 +464,12 @@ export default function ThreeBackground({ className = '' }: ThreeBackgroundProps
   return (
     <div 
       ref={containerRef} 
-      className={`fixed inset-0 -z-10 ${className}`}
-      style={{ pointerEvents: 'none' }}
+      className={`${className}`}
+      style={{ 
+        pointerEvents: 'none',
+        width: width || '100%',
+        height: height || '100%'
+      }}
     />
   );
 }
