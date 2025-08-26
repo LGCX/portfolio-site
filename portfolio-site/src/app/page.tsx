@@ -6,19 +6,20 @@ import KeynoteCard from "@/components/KeynoteCard";
 
 export default function Home() {
   return (
+    
     <ResponsiveLayout showDevMode={false}>
-      
-      {/* Header */}
-      <Header />
-      
-      {/* Diagonal Gradient Background */}
-      <ResponsiveSection
+         <ResponsiveSection
         position="absolute"
         className="top-0 left-0 w-full h-[150vh] z-0"
         padding="none"
       >
         <ThreeBackground texturePath="/futuristic-chrome.png" incline={0.45} />
       </ResponsiveSection>
+      {/* Header */}
+      <Header />
+      
+      {/* Diagonal Gradient Background */}
+   
 
       {/* Hero Content - Responsive Typography */}
       <ResponsiveSection
