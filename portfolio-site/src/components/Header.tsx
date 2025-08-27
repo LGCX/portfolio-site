@@ -55,7 +55,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 w-full z-50" style={{ mixBlendMode: 'difference' }}>
+    <header className="fixed top-0 w-full z-50 backdrok-blur-sm" style={{ mixBlendMode: 'difference' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}

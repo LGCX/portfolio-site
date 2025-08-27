@@ -9,10 +9,20 @@ interface ThreeBackgroundProps {
   width?: number;
   height?: number;
   texturePath?: string;
-  incline?: number
+  incline?: number;
+  cameraZoom?: number;
 }
 
-export default function ThreeBackground({ className = '', width, height, texturePath = '/futuristic-chrome.png.png', incline = 0 }: ThreeBackgroundProps) {
+export default function ThreeBackground(
+  { 
+    className = '', 
+    width, 
+    height, 
+    texturePath = '/futuristic-chrome.png.png', 
+    incline = 0,
+    cameraZoom = 5
+    
+  }: ThreeBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{
     scene: THREE.Scene;
@@ -36,7 +46,7 @@ export default function ThreeBackground({ className = '', width, height, texture
       const containerWidth = width || containerRef.current!.clientWidth;
       const containerHeight = height || containerRef.current!.clientHeight;
       const camera = new THREE.PerspectiveCamera(100, containerWidth / containerHeight, 0.1, 1000);
-      camera.zoom = 5;
+      camera.zoom = cameraZoom;
       camera.position.set(0, -0.2, 10);
       camera.updateProjectionMatrix();
       return camera;

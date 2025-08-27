@@ -3,6 +3,8 @@ import ResponsiveSection from "@/components/ResponsiveSection";
 import ThreeBackground from "@/components/ThreeBackground";
 import Header from "@/components/Header";
 import KeynoteCard from "@/components/KeynoteCard";
+import AboutTwoColumn from "@/components/AboutTwoColumn";
+import StatsRow from "@/components/StatsRow";
 
 export default function Home() {
   return (
@@ -13,7 +15,7 @@ export default function Home() {
         className="top-0 left-0 w-full h-[150vh] z-0"
         padding="none"
       >
-        <ThreeBackground texturePath="/futuristic-chrome.png" incline={0.45} />
+        <ThreeBackground texturePath="/futuristic-chrome.png" incline={0.40} />
       </ResponsiveSection>
       {/* Header */}
       <Header />
@@ -42,14 +44,42 @@ export default function Home() {
         </div>
       </ResponsiveSection>
 
-      {/* Keynote Card Section */}
+      {/* About + Image section (Stripe-style) */}
       <ResponsiveSection
-        layout="flex"
-        className="flex-col justify-center items-center px-6 py-20 sm:px-12 lg:px-20 bg-gradient-to-br from-orange-300 via-orange-200 to-purple-300"
-        padding="lg"
+        layout="block"
+        className="py-24 mt-50 sm:py-28 bg-white"
+        padding="none"
       >
-        <KeynoteCard imagePath="/me.jpeg" />
+        <AboutTwoColumn
+          eyebrow="About"
+          title={
+            <>
+              My mission is to build
+              <br /> the Technologies of the Future
+            </>
+          }
+          paragraphs={[
+            "I'm a creative technologist who builds economic infrastructure for the internet. From startups to public companies, I design and ship software that accepts payments, automates operations, and delivers delightful user experiences.",
+            "Based in the Austin, with experience working across global teams and markets.",
+          ]}
+          imageSrc="/Luis_Engineering_Headshot_Office.jpeg"
+          imageAlt="Workspace photo"
+          imageWidthPx={550}
+        />
       </ResponsiveSection>
+
+      {/* Stats row */}
+      <ResponsiveSection layout="block" className="pb-16" padding="none">
+        <StatsRow
+          stats={[
+            { value: "5+", label: "Years of Software Development Experience" },
+            { value: "10K+", label: "Lines of production code shipped across full-stack systems" },
+            { value: "5+", label: "Tech stacks mastered — Java, Spring, React, Node.js, SQL" },
+            { value: "∞", label: "Dedication to shipping scalable, maintainable, and clean code" }
+          ]}
+        />
+      </ResponsiveSection>
+
     </ResponsiveLayout>
   );
 }
