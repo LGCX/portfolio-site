@@ -55,17 +55,24 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 backdrop-blur-2xl border" style={{ mixBlendMode: 'difference' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="liquid-glass-header fixed top-0 w-full z-50" style={{ color: 'black'  }}>
+      {/* Glass container */}
+      <div 
+        className="glass-container"
+        style={{
+          background: 'rgba(255, 255, 255, 0.08)',
+          border: '1px solid gray',
+          backdropFilter: 'blur(10px) saturate(1.8)',
+          WebkitBackdropFilter: 'blur(20px) saturate(1.8)'
+        }}
+      >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 " >
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <div className="relative">
-              <div className="absolute inset-0 bg-black/20 rounded-lg -m-2"></div>
-              <div className="relative text-white text-2xl font-bold tracking-tight px-2 py-1">
+              <div className="relative text-black text-2xl font-bold tracking-tight px-2 py-1">
                 Luis Guillermo Cordova
               </div>
-            </div>
           </div>
 
           {/* Desktop Navigation */}
@@ -79,7 +86,7 @@ export default function Header() {
               >
                 <div className="relative">
                   <div className="absolute inset-0  bg-black/15 rounded-lg -m-2 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
-                  <button className="relative flex items-center text-white/90 hover:text-white transition-colors duration-200 text-sm font-medium px-2 py-1">
+                  <button className="relative flex items-center text-black/90 hover:text-black transition-colors duration-200 text-sm font-medium px-2 py-1">
                     {item.label}
                     {item.hasDropdown && (
                       <svg
@@ -127,7 +134,7 @@ export default function Header() {
           <div className="hidden lg:flex items-center space-x-4">
             <div className="relative">
               <div className="absolute inset-0 bg-black/20 rounded-full"></div>
-              <button className="relative bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-200" style={{ border: '1px solid white' }}>
+              <button className="relative bg-white/10 hover:bg-white/20 text-black px-4 py-2 rounded-full text-sm font-medium transition-all duration-200" style={{ border: '1px solid black' }}>
                 Contact me
                 <svg className="ml-1 h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -139,10 +146,9 @@ export default function Header() {
           {/* Mobile menu button */}
           <div className="lg:hidden">
             <div className="relative">
-              <div className="absolute inset-0 bg-black/15 rounded-lg -m-2 opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="relative text-white/90 hover:text-white transition-colors duration-200 p-2"
+                className="relative text-black/90 hover:text-white transition-colors duration-200 p-2"
               >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {mobileMenuOpen ? (
@@ -157,9 +163,12 @@ export default function Header() {
         </div>
 
         {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 border-t border-white/20 shadow-lg z-20">
-            <div className="px-4 py-6 space-y-4">
+        <div className={`lg:hidden absolute top-full left-0 right-0 bg-white/95 border-t border-white/20 shadow-lg z-20 transition-all duration-300 ease-in-out ${
+          mobileMenuOpen 
+            ? 'opacity-100 translate-y-0 pointer-events-auto' 
+            : 'opacity-0 -translate-y-4 pointer-events-none'
+        }`}>
+          <div className="px-4 py-6 space-y-4">
               {navigationItems.map((item) => (
                 <div key={item.label}>
                   <button className="block w-full text-left text-gray-900 hover:text-gray-600 transition-colors duration-200 text-sm font-medium py-2">
@@ -178,16 +187,13 @@ export default function Header() {
                 </div>
               ))}
               <div className="pt-4 border-t border-gray-200 space-y-3">
-                <button className="block w-full text-left text-gray-900 hover:text-gray-600 transition-colors duration-200 text-sm font-medium">
-                  Sign in
-                </button>
                 <button className="block w-full bg-gray-900 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors duration-200">
-                  Contact sales
+                  Contact Me
                 </button>
               </div>
             </div>
-          </div>
-        )}
+        </div>
+      </div>
       </div>
     </header>
   );
